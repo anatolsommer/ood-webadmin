@@ -1,0 +1,29 @@
+{
+  "name": "ood-webadmin",
+  "description": "Web interface for ood process manager",
+  "version": "0.0.1-beta",
+  "license": "MIT",
+  "author": "Anatol Sommer <anatol@anatol.at>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anatolsommer/ood-webadmin.git"
+  },
+  "keywords": ["ood", "webadmin", "web", "webinterface", "oodmin"],
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "jade": "^1.11.0",
+    "stylus": "^0.54.0"
+  },
+  "devDependencies": {
+    "jshint": "^2.9.1",
+    "mocha": "^2.4.5",
+    "istanbul": "^0.4.2"
+  },
+  "scripts": {
+    "jshint": "jshint --show-non-errors lib/* && echo 'No errors!\n' ; set $?=0",
+    "test": "mocha --check-leaks test/test.js",
+    "test-cov": "istanbul cover node_modules/mocha/bin/_mocha test/test.js"
+  }
+}

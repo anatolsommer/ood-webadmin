@@ -1,0 +1,27 @@
+extends layout
+
+block script
+  script(src='/.oodmin/lib/jquery-2.2.1.min.js')
+  script(src='/.oodmin/lib/bs/js/bootstrap.min.js')
+  - if (user)
+    script(src='/.oodmin/js/main.js')
+
+block menu
+  - if (user)
+    li: a(href='/.oodmin/status') Status
+    li: a.logout(href='#') Logout
+
+block content
+  - if (user)
+    block main
+  - else
+    form#login(action='/.oodmin', method='post')
+      input(type='hidden', name='csrf', value=csrf)
+      label.sr-only(for='pass') Password
+      input#pass.form-control(type='password', placeholder='Password', name='pass', required)
+      button.btn.btn-primary.btn-block(type='submit') Sign in
+      - if (loginMsg)
+        .alert.alert-danger(role='alert')=loginMsg
+          button.close(type='button', data-dismiss='alert', aria-label='Close')
+           span(aria-hidden='true') &times;
+

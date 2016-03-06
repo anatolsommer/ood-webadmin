@@ -1,0 +1,6 @@
+{
+  "type": "app",
+  "proxyPath": "oodmin",
+  "proxyNoAuth": true,
+  "api": true
+}

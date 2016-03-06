@@ -1,0 +1,12 @@
+extends ../app
+
+block main
+  table.table.table-condensed
+    thead: tr
+      th App name
+      th Worker
+      th State
+      th.r Uptime
+      th.r.hidden-xs CPU
+      th.r.hidden-xs RAM
+    tbody#status

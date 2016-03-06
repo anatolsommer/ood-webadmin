@@ -1,0 +1,21 @@
+body {
+  padding-top: 70px;
+}
+h1:first-child {
+  margin-top: 0;
+}
+#login {
+  max-width: 330px;
+  padding: 15px;
+  margin: 5% auto;
+}
+#login .btn-block {
+  margin-top: 10px;
+}
+#login .alert {
+  margin-top: 15px;
+}
+table th.r,
+table td.r {
+  text-align: right;
+}

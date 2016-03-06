@@ -17,6 +17,8 @@ block content
   - else
     form#login(action='/.oodmin', method='post')
       input(type='hidden', name='csrf', value=csrf)
+      label.sr-only(for='user') Username
+      input#user.form-control(type='text', placeholder='Username', name='user', required)
       label.sr-only(for='pass') Password
       input#pass.form-control(type='password', placeholder='Password', name='pass', required)
       button.btn.btn-primary.btn-block(type='submit') Sign in

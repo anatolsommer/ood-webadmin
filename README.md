@@ -14,7 +14,7 @@ Web interface for ood process manager
 ## Usage
 Path: `[yourserver]/.oodmin`
 
-For now the ood token is used as password. (`ood config -g token`)
+For now the username is being ignored and the ood token is used as password. (`ood config -g token`)
 
 This is only a proof of concept, I am working on a full featured interface.
 

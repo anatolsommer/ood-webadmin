@@ -1,12 +1,36 @@
 extends ../app
 
 block main
-  table.table.table-condensed
+  table.table.table-condensed#status(ng-controller='StatusCtrl')
     thead: tr
       th App name
       th Worker
       th State
-      th.r Uptime
-      th.r.hidden-xs CPU
-      th.r.hidden-xs RAM
-    tbody#status
+      th.r.uptime.hidden-xxs Uptime
+      th.r.cpu.hidden-xs CPU
+      th.r.ram.hidden-xs RAM
+      th.actions.hidden-xs
+    tbody
+      tr(ng-repeat-start='(appName, app) in status')
+        td(rowspan='{{app.workers.length+1}}')
+          -// a(href='/.oodmin/app/{{appName}}') {{appName}}
+          | {{appName}}
+        td Master
+        td(class='state-{{app.master.state}}') {{app.master.state}}
+          span.badge.badge-danger(ng-hide='app.errors===0') {{app.errors}}
+        td.r.uptime.hidden-xxs {{uptime(app.master.startTime)}}
+        td.r.hidden-xs {{app.master.usage.cpu | cpu}}
+        td.r.hidden-xs {{app.master.usage.ram | ram}}
+        td.r.hidden-xs
+          select.scale(ng-model='app.scale', ng-change='scale(appName, app)')
+            option(value='') Scale
+          button.btn.btn-warning(ng-click='restart(appName)') Restart
+      tr(ng-repeat-end, ng-repeat='worker in app.workers')
+        td
+          span.hidden-xxs Worker 
+          span &#35;{{worker.workerId}}
+        td(class='state-{{worker.state}}') {{worker.state}}
+        td.r.uptime.hidden-xxs {{uptime(worker.startTime)}}
+        td.r.hidden-xs {{worker.usage.cpu | cpu}}
+        td.r.hidden-xs {{worker.usage.ram | ram}}
+

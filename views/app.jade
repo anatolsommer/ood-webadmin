@@ -2,14 +2,14 @@ extends layout
 
 block script
   script(src='/.oodmin/lib/jquery-2.2.1.min.js')
+  script(src='/.oodmin/lib/angular.min.js')
   script(src='/.oodmin/lib/bs/js/bootstrap.min.js')
-  - if (user)
-    script(src='/.oodmin/js/main.js')
+  script(src='/.oodmin/js/main.js')
 
 block menu
   - if (user)
     li: a(href='/.oodmin/status') Status
-    li: a.logout(href='#') Logout
+    li: a.logout(href='#', ng-click='logout()') Logout
 
 block content
   - if (user)

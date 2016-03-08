@@ -1,0 +1,8 @@
+extends ../app
+
+block main
+  div(ng-controller='StatusCtrl', ng-init='appName="'+appName+'"')
+    h1 {{appName}}
+    .info {{status[appName].master}}
+    .actions
+      button Restart app

@@ -1,63 +1,80 @@
-jQuery(function($) {
-  var $status=$('#status');
+(function($) {
+  var ood=angular.module('ood', []), csrf=$('html').attr('csrf'), scaleOptions;
 
-  $.ajaxSetup({
-    headers:{'x-csrf':$('html').attr('csrf')}
+  scaleOptions=new Array(33).join().replace(/./g, function(m, i) {
+    return '<option value="'+(i+1)+'">'+(i+1)+'</option>';
   });
 
-  function api(cmd, params, cb) {
-    if (!cb) {
-      cb=params;
-      params=null;
+  $(document).on('focus', 'select.scale', function() {
+    if (this.childNodes.length===1) {
+      $(this).append(scaleOptions);
     }
-    $.post('/.oodmin/api/'+cmd, params)
-      .success(function(res) {
-        if (res.error) {
-          alert(res.error);
-        } else {
-          cb(res);
+  });
+
+  ood.factory('api', function($http) {
+    return function api(cmd, params, cb) {
+      if (typeof params==='function') {
+        cb=params;
+        params=null;
+      }
+      $http({
+        method:'POST',
+        url:'/.oodmin/api/'+cmd,
+        data:params,
+        headers:{'x-csrf':csrf}
+      }).then(function(res) {
+        if (res.data.error) {
+          alert(res.data.error);
+        } else if (typeof cb==='function') {
+          cb(res.data);
         }
-      })
-      .error(function() {
-        alert('ooops');
+      }, function(res) {
+        location.reload();
       });
-  }
+    }
+  });
 
-  api.logout=function() {
-    api('logout', function() {
-      location.href='/.oodmin';
-    });
-    return false;
-  };
-
-  if ($status.length) {
-    api('status', function(res) {
-      var trs=[];
-      Object.keys(res.status).forEach(function(appName) {
-        var app=res.status[appName];
-        trs.push($('<tr>').append([
-          $('<td>').prop('rowspan', app.workers.length+1).text(appName),
-          $('<td>').text('Master'),
-          $('<td>').text(app.master.state),
-          $('<td class="r">').text(uptimeHuman(app.master.startTime)),
-          $('<td class="r hidden-xs">').text(formatCPU(app.master.usage.cpu)),
-          $('<td class="r hidden-xs">').text(formatRAM(app.master.usage.ram))
-        ]));
-        app.workers.forEach(function(worker) {
-          trs.push($('<tr>').append([
-            $('<td>').text('Worker #'+worker.workerId),
-            $('<td>').text(worker.state),
-            $('<td class="r">').text(uptimeHuman(worker.startTime)),
-            $('<td class="r hidden-xs">').text(formatCPU(worker.usage.cpu)),
-            $('<td class="r hidden-xs">').text(formatRAM(worker.usage.ram))
-          ]));
-        });
+  ood.controller('MenuCtrl', function($scope, api) {
+    $scope.logout=function() {
+      api('logout', function() {
+        location.href='/.oodmin';
       });
-      $status.empty().append(trs);
-    });
-  }
+      return false;
+    };
+  });
 
-  $('nav .logout').click(api.logout);
+  ood.controller('StatusCtrl', function($scope, $timeout, api) {
+    $scope.status={};
+    $scope.uptime=uptimeHuman;
+
+    $scope.restart=function(appName) {
+      api('restart', {app:appName});
+    };
+
+    $scope.scale=function(appName, app) {
+      api('scale', {app:appName, instances:app.scale});
+      app.scale='';
+    };
+
+    (function refresh() {
+      api('status', function(data) {
+        $scope.status=data.status;
+        $timeout(refresh, 3000);
+      });
+    })();
+  });
+
+  ood.filter('cpu', function() {
+    return function(p) {
+      return (p===null || p===-1) ? 'N/A' : p.toFixed(1)+'%';
+    };
+  });
+
+  ood.filter('ram', function() {
+    return function(b) {
+      return (b===null || b===-1) ? 'N/A' : (b/1048576).toFixed(2)+' MB';
+    };
+  });
 
   function uptimeHuman(time) {
     var ms=Date.now()-time, s=Math.floor(ms/1000), m, h, d;
@@ -73,12 +90,4 @@ jQuery(function($) {
     return d+'d '+h+':'+m+':'+s;
   }
 
-  function formatCPU(p) {
-    return (p===null || p===-1) ? 'N/A'.grey : p.toFixed(1)+'%';
-  }
-
-  function formatRAM(b) {
-    return (b===null || b===-1) ? 'N/A'.grey : (b/1048576).toFixed(2)+' MB';
-  }
-
-});
+})(jQuery);

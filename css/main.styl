@@ -4,10 +4,15 @@ body
 h1:first-child
   margin-top:0
 
+h1
+  font-size:30px
+h2
+  font-size:26px
+
 #login
   max-width:330px
   padding:15px
-  margin:5% auto
+  margin:4% auto
   .btn-block
     margin-top:10px
   .alert
@@ -15,6 +20,30 @@ h1:first-child
 #user
   margin-bottom:5px
 
-table
+#status
   th.r, td.r
     text-align:right
+  .uptime
+    width:14%
+    white-space:nowrap
+  th.ram, th.cpu
+    width:11%
+  th.actions
+    width:140px
+  td.state-running, td.state-listening
+    color:green
+  .badge-danger
+    position:absolute
+    margin:1px 4px
+    color:white
+    background-color:#D9534F
+  .btn
+    margin:-6px 0
+    padding:1px 5px
+  .scale
+    margin:0 5px -2px 0
+    padding:1px 0 2px
+
+.hidden-xxs
+  @media (max-width:500px)
+    display:none

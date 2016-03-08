@@ -4,10 +4,16 @@ body {
 h1:first-child {
   margin-top: 0;
 }
+h1 {
+  font-size: 30px;
+}
+h2 {
+  font-size: 26px;
+}
 #login {
   max-width: 330px;
   padding: 15px;
-  margin: 5% auto;
+  margin: 4% auto;
 }
 #login .btn-block {
   margin-top: 10px;
@@ -18,7 +24,41 @@ h1:first-child {
 #user {
   margin-bottom: 5px;
 }
-table th.r,
-table td.r {
+#status th.r,
+#status td.r {
   text-align: right;
+}
+#status .uptime {
+  width: 14%;
+  white-space: nowrap;
+}
+#status th.ram,
+#status th.cpu {
+  width: 11%;
+}
+#status th.actions {
+  width: 140px;
+}
+#status td.state-running,
+#status td.state-listening {
+  color: #008000;
+}
+#status .badge-danger {
+  position: absolute;
+  margin: 1px 4px;
+  color: #fff;
+  background-color: #d9534f;
+}
+#status .btn {
+  margin: -6px 0;
+  padding: 1px 5px;
+}
+#status .scale {
+  margin: 0 5px -2px 0;
+  padding: 1px 0 2px;
+}
+@media (max-width: 500px) {
+  .hidden-xxs {
+    display: none;
+  }
 }

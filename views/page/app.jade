@@ -3,6 +3,10 @@ extends ../app
 block main
   div(ng-controller='StatusCtrl', ng-init='appName="'+appName+'"')
     h1 {{appName}}
-    .info {{status[appName].master}}
+
     .actions
-      button Restart app
+      button.btn.btn-warning(ng-click='restart(appName)') Restart app
+
+    .config(ng-controller='ConfigCtrl', style='white-space:pre;') {{config | json}}
+
+    .info(style='white-space:pre;') {{status[appName] | json}}

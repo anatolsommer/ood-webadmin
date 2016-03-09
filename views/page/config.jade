@@ -1,0 +1,6 @@
+extends ../app
+
+block main
+  div(ng-controller='ConfigCtrl')
+    h1 Config
+    .config(style='white-space:pre;') {{config | json}}

@@ -64,6 +64,22 @@
     })();
   });
 
+  ood.controller('ConfigCtrl', function($scope, api) {
+    $scope.config={};
+
+    $scope.refresh=function() {
+      api(
+        'config',
+        {get:$scope.appName ? 'app:'+$scope.appName : ''},
+        function(res) {
+          $scope.config=res.value;
+        }
+      );
+    };
+
+    $scope.refresh();
+  });
+
   ood.filter('cpu', function() {
     return function(p) {
       return (p===null || p===-1) ? 'N/A' : p.toFixed(1)+'%';
@@ -73,6 +89,12 @@
   ood.filter('ram', function() {
     return function(b) {
       return (b===null || b===-1) ? 'N/A' : (b/1048576).toFixed(2)+' MB';
+    };
+  });
+
+  ood.filter('json', function() {
+    return function(d) {
+      return JSON.stringify(d, null, 2);
     };
   });
 

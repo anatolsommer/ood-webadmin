@@ -13,8 +13,7 @@ block main
     tbody
       tr(ng-repeat-start='(appName, app) in status')
         td(rowspan='{{app.workers.length+1}}')
-          -// a(href='/.oodmin/app/{{appName}}') {{appName}}
-          | {{appName}}
+          a(href='/.oodmin/app/{{appName}}') {{appName}}
         td Master
         td(class='state-{{app.master.state}}') {{app.master.state}}
           span.badge.badge-danger(ng-hide='app.errors===0') {{app.errors}}

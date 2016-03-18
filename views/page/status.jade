@@ -1,7 +1,7 @@
 extends ../app
 
 block main
-  table.table.table-condensed#status(ng-controller='StatusCtrl')
+  table#status.table.table-condensed.status(ng-controller='StatusCtrl')
     thead: tr
       th App name
       th Worker
@@ -32,4 +32,3 @@ block main
         td.r.uptime.hidden-xxs {{uptime(worker.startTime)}}
         td.r.hidden-xs {{worker.usage.cpu | cpu}}
         td.r.hidden-xs {{worker.usage.ram | ram}}
-

@@ -1,5 +1,6 @@
 body
   padding-top:70px
+  overflow-y:scroll
 
 h1:first-child
   margin-top:0
@@ -8,6 +9,15 @@ h1
   font-size:30px
 h2
   font-size:26px
+
+.navbar-brand
+  width:100px
+  margin-left:-6px !important
+  background:url(/.oodmin/oodmin.svg) 0 2px no-repeat
+  background-size:contain
+  opacity:.6
+  &:hover
+    opacity:.7
 
 #login
   max-width:330px
@@ -21,15 +31,21 @@ h2
   margin-bottom:5px
 
 #status
-  th.r, td.r
-    text-align:right
   .uptime
     width:14%
-    white-space:nowrap
   th.ram, th.cpu
     width:11%
   th.actions
     width:140px
+
+.status
+  th.r, td.r
+    text-align:right
+  .uptime
+    width:20%
+    white-space:nowrap
+  th.ram, th.cpu
+    width:20%
   td.state-running, td.state-listening
     color:green
   .badge-danger
@@ -44,6 +60,51 @@ h2
     margin:0 5px -2px 0
     padding:1px 0 2px
 
-.hidden-xxs
-  @media (max-width:500px)
+#config
+  font-family:monospace
+  .json-key, .json-number, .json-string, .json-true, .json-false
+    font-weight:bold
+  .json-key
+    color:darkblue
+  .json-string
+    color:blue
+  .json-number
+    color:purple
+  .json-true
+    color:green
+  .json-false
+    color:red
+
+.app-actions
+  float:right
+  margin-top:-43px
+  .btn
+    margin-left:5px
+  .scale
+    display:inline-block
+    width:90px
+
+.app-config
+  dl
+    margin:8px 0
+    padding:0 5px
+    @media (max-width:992px)
+      margin:5px 0
+  dt
+    text-transform:uppercase
+    font-size:0.9em
+    color:#888
+
+@media (max-width:768px)
+  .navbar-brand
+    margin-left:1px !important
+
+@media (max-width:500px)
+  .hidden-xxs
     display:none
+  .col-xxs-12
+    width:100%
+  .app-actions
+    float:none
+    margin-top:5px
+

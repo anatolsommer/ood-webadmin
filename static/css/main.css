@@ -1,5 +1,6 @@
 body {
   padding-top: 70px;
+  overflow-y: scroll;
 }
 h1:first-child {
   margin-top: 0;
@@ -9,6 +10,16 @@ h1 {
 }
 h2 {
   font-size: 26px;
+}
+.navbar-brand {
+  width: 100px;
+  margin-left: -6px !important;
+  background: url("/.oodmin/oodmin.svg") 0 2px no-repeat;
+  background-size: contain;
+  opacity: 0.6;
+}
+.navbar-brand:hover {
+  opacity: 0.7;
 }
 #login {
   max-width: 330px;
@@ -24,13 +35,8 @@ h2 {
 #user {
   margin-bottom: 5px;
 }
-#status th.r,
-#status td.r {
-  text-align: right;
-}
 #status .uptime {
   width: 14%;
-  white-space: nowrap;
 }
 #status th.ram,
 #status th.cpu {
@@ -39,26 +45,100 @@ h2 {
 #status th.actions {
   width: 140px;
 }
-#status td.state-running,
-#status td.state-listening {
+.status th.r,
+.status td.r {
+  text-align: right;
+}
+.status .uptime {
+  width: 20%;
+  white-space: nowrap;
+}
+.status th.ram,
+.status th.cpu {
+  width: 20%;
+}
+.status td.state-running,
+.status td.state-listening {
   color: #008000;
 }
-#status .badge-danger {
+.status .badge-danger {
   position: absolute;
   margin: 1px 4px;
   color: #fff;
   background-color: #d9534f;
 }
-#status .btn {
+.status .btn {
   margin: -6px 0;
   padding: 1px 5px;
 }
-#status .scale {
+.status .scale {
   margin: 0 5px -2px 0;
   padding: 1px 0 2px;
+}
+#config {
+  font-family: monospace;
+}
+#config .json-key,
+#config .json-number,
+#config .json-string,
+#config .json-true,
+#config .json-false {
+  font-weight: bold;
+}
+#config .json-key {
+  color: #00008b;
+}
+#config .json-string {
+  color: #00f;
+}
+#config .json-number {
+  color: #800080;
+}
+#config .json-true {
+  color: #008000;
+}
+#config .json-false {
+  color: #f00;
+}
+.app-actions {
+  float: right;
+  margin-top: -43px;
+}
+.app-actions .btn {
+  margin-left: 5px;
+}
+.app-actions .scale {
+  display: inline-block;
+  width: 90px;
+}
+.app-config dl {
+  margin: 8px 0;
+  padding: 0 5px;
+}
+@media (max-width: 992px) {
+  .app-config dl {
+    margin: 5px 0;
+  }
+}
+.app-config dt {
+  text-transform: uppercase;
+  font-size: 0.9em;
+  color: #888;
+}
+@media (max-width: 768px) {
+  .navbar-brand {
+    margin-left: 1px !important;
+  }
 }
 @media (max-width: 500px) {
   .hidden-xxs {
     display: none;
+  }
+  .col-xxs-12 {
+    width: 100%;
+  }
+  .app-actions {
+    float: none;
+    margin-top: 5px;
   }
 }

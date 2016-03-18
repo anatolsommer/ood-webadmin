@@ -45,6 +45,8 @@
 
   ood.controller('StatusCtrl', function($scope, $timeout, api) {
     $scope.status={};
+    $scope.app={};
+
     $scope.uptime=uptimeHuman;
 
     $scope.restart=function(appName) {
@@ -82,19 +84,19 @@
 
   ood.filter('cpu', function() {
     return function(p) {
-      return (p===null || p===-1) ? 'N/A' : p.toFixed(1)+'%';
+      return (typeof p!=='number' || p===-1) ? 'N/A' : p.toFixed(1)+'%';
     };
   });
 
   ood.filter('ram', function() {
     return function(b) {
-      return (b===null || b===-1) ? 'N/A' : (b/1048576).toFixed(2)+' MB';
+      return (typeof b!=='number' || b===-1) ? 'N/A' : (b/1048576).toFixed(2)+' MB';
     };
   });
 
-  ood.filter('json', function() {
+  ood.filter('teselecta', function($sce) {
     return function(d) {
-      return JSON.stringify(d, null, 2);
+      return $sce.trustAsHtml(teselecta(d));
     };
   });
 

@@ -1,0 +1,37 @@
+div(ng-controller='StatusCtrl')
+  h1 {{appName}}
+
+  .app-actions
+    select.form-control.scale(ng-model='app.scale', ng-change='scale(appName, app)')
+      option(value='') Scale
+    button.btn.btn-warning(ng-click='restart(appName)') Restart app
+
+  .app-config(ng-controller='ConfigCtrl')
+    dl.col-xxs-12.col-xs-6.col-md-4.col-lg-3(ng-repeat='(key, val) in config')
+      dt {{key}}
+      dd {{val}}
+
+  table.table.table-condensed.status
+    thead: tr
+      th Worker
+      th State
+      th.r.uptime.hidden-xs Uptime
+      th.r.cpu CPU
+      th.r.ram RAM
+
+    tr
+      td Master
+      td(class='state-{{status[appName].master.state}}') {{status[appName].master.state}}
+        span.badge.badge-danger(ng-hide='app.errors===0') {{app.errors}}
+      td.r.uptime.hidden-xs {{uptime(status[appName].master.startTime)}}
+      td.r {{status[appName].master.usage.cpu | cpu}}
+      td.r {{status[appName].master.usage.ram | ram}}
+    tr(ng-repeat='worker in status[appName].workers')
+      td
+        span.hidden-xxs Worker 
+        span &#35;{{worker.workerId}}
+      td(class='state-{{worker.state}}') {{worker.state}}
+      td.r.uptime.hidden-xs {{uptime(worker.startTime)}}
+      td.r {{worker.usage.cpu | cpu}}
+      td.r {{worker.usage.ram | ram}}
+

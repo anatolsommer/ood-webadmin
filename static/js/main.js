@@ -1,5 +1,5 @@
 (function($) {
-  var ood=angular.module('ood', []), csrf=$('html').attr('csrf'), scaleOptions;
+  var ood=angular.module('ood', ['ngRoute']), scaleOptions;
 
   scaleOptions=new Array(33).join().replace(/./g, function(m, i) {
     return '<option value="'+(i+1)+'">'+(i+1)+'</option>';
@@ -11,8 +11,16 @@
     }
   });
 
-  ood.factory('api', function($http) {
-    return function api(cmd, params, cb) {
+  ood.config(function($routeProvider) {
+    router($routeProvider)
+      .when('/status', {templateUrl:'/.oodmin/view/status'})
+      .when('/config', {templateUrl: '/.oodmin/view/config'})
+      .when('/app/:appName', {templateUrl:'/.oodmin/view/app'})
+      .otherwise({redirectTo:'/status'});
+  });
+
+  ood.factory('api', function($http, $route, $rootScope) {
+    function api(cmd, params, cb) {
       if (typeof params==='function') {
         cb=params;
         params=null;
@@ -21,29 +29,34 @@
         method:'POST',
         url:'/.oodmin/api/'+cmd,
         data:params,
-        headers:{'x-csrf':csrf}
+        headers:{'x-csrf':$rootScope.csrf}
       }).then(function(res) {
         if (res.data.error) {
           alert(res.data.error);
+          $route.reload();
         } else if (typeof cb==='function') {
           cb(res.data);
         }
       }, function(res) {
-        location.reload();
+        alert('error');
+        $route.reload();
       });
     }
-  });
 
-  ood.controller('MenuCtrl', function($scope, api) {
-    $scope.logout=function() {
-      api('logout', function() {
-        location.href='/.oodmin';
-      });
-      return false;
+    api.logout=function() {
+      api('logout');
+      $route.reload();
     };
+
+    return api;
   });
 
-  ood.controller('StatusCtrl', function($scope, $timeout, api) {
+  ood.controller('AppCtrl', function($scope, api) {
+    $scope.logout=api.logout;
+  });
+
+  ood.controller('StatusCtrl', function($scope, $routeParams, $timeout, api) {
+    $scope.appName=$routeParams.appName;
     $scope.status={};
     $scope.app={};
 
@@ -59,20 +72,31 @@
     };
 
     (function refresh() {
+      if (!$scope.loggedIn) {
+        return;
+      }
       api('status', function(data) {
         $scope.status=data.status;
-        $timeout(refresh, 3000);
+        $scope.timeout=[
+          $timeout($scope.$apply.bind($scope), 1000),
+          $timeout($scope.$apply.bind($scope), 2000),
+          $timeout(refresh, 2950)
+        ];
       });
     })();
+
+    $scope.$on('$destroy', function(){
+      $scope.timeout.forEach($timeout.cancel);
+    });
   });
 
-  ood.controller('ConfigCtrl', function($scope, api) {
+  ood.controller('ConfigCtrl', function($scope, $routeParams, api) {
     $scope.config={};
 
     $scope.refresh=function() {
       api(
         'config',
-        {get:$scope.appName ? 'app:'+$scope.appName : ''},
+        {get:$routeParams.appName ? 'app:'+$routeParams.appName : ''},
         function(res) {
           $scope.config=res.value;
         }
@@ -99,6 +123,26 @@
       return $sce.trustAsHtml(teselecta(d));
     };
   });
+
+  function init($q, $http, $rootScope) {
+    var deffered=$q.defer();
+    $http.get('/.oodmin/api/init').then(function(res) {
+      $rootScope.loggedIn=res.data.loggedIn;
+      $rootScope.csrf=res.data.csrf;
+      deffered[$rootScope.loggedIn ? 'resolve' : 'reject']();
+    });
+    return deffered.promise;
+  }
+
+  function router($routeProvider) {
+    return angular.extend({}, $routeProvider, {
+      when: function(path, route) {
+        route.resolve=angular.extend({init:init}, route.resolve);
+        $routeProvider.when(path, route);
+        return this;
+      }
+    })
+  }
 
   function uptimeHuman(time) {
     var ms=Date.now()-time, s=Math.floor(ms/1000), m, h, d;

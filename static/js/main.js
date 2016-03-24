@@ -151,6 +151,9 @@
 
   function uptimeHuman(time) {
     var ms=Date.now()-time, s=Math.floor(ms/1000), m, h, d;
+    if (isNaN(ms)) {
+      return '';
+    }
     m=Math.floor(s/60);
     s=s % 60;
     h=Math.floor(m/60);

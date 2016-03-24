@@ -67,8 +67,13 @@
     };
 
     $scope.scale=function(appName, app) {
-      api('scale', {app:appName, instances:app.scale});
+      var scale=app.scale, diff=app.workers.length-scale,
+        q='Do you really want to kill '+diff+' worker'+(diff>1 ? 's' : '')+'?';
       app.scale='';
+      if (diff>0 && !confirm(q)) {
+        return;
+      }
+      api('scale', {app:appName, instances:scale});
     };
 
     (function refresh() {

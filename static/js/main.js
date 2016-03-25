@@ -56,15 +56,22 @@
   });
 
   ood.controller('StatusCtrl', function($scope, $routeParams, $timeout, api) {
+    var timeout=[];
+
     $scope.appName=$routeParams.appName;
     $scope.status={};
     $scope.app={};
 
     $scope.uptime=uptimeHuman;
 
-    $scope.restart=function(appName) {
-      api('restart', {app:appName});
-    };
+    ['start', 'stop', 'restart'].forEach(function(cmd) {
+      $scope[cmd]=function(appName) {
+        if (cmd==='stop' && !confirm('Do you really want to stop this app?')) {
+          return;
+        }
+        api(cmd, {app:appName});
+      };
+    });
 
     $scope.scale=function(appName, app) {
       var scale=app.scale, diff=app.workers.length-scale,
@@ -82,7 +89,8 @@
       }
       api('status', function(data) {
         $scope.status=data.status;
-        $scope.timeout=[
+        $scope.app=$scope.status[$scope.appName];
+        timeout=[
           $timeout($scope.$apply.bind($scope), 1000),
           $timeout($scope.$apply.bind($scope), 2000),
           $timeout(refresh, 2950)
@@ -91,11 +99,13 @@
     })();
 
     $scope.$on('$destroy', function(){
-      $scope.timeout.forEach($timeout.cancel);
+      timeout.forEach($timeout.cancel);
     });
   });
 
-  ood.controller('ConfigCtrl', function($scope, $routeParams, api) {
+  ood.controller('ConfigCtrl', function($scope, $routeParams, $timeout, api) {
+    var timeout;
+
     $scope.config={};
 
     $scope.refresh=function() {
@@ -108,7 +118,17 @@
       );
     };
 
-    $scope.refresh();
+    (function refresh() {
+      if (!$scope.loggedIn) {
+        return;
+      }
+      $scope.refresh();
+      timeout=$timeout(refresh, 5000);
+    })();
+
+    $scope.$on('$destroy', function(){
+      $timeout.cancel(timeout);
+    });
   });
 
   ood.filter('cpu', function() {

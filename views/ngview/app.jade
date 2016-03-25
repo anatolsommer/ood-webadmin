@@ -2,9 +2,11 @@ div(ng-controller='StatusCtrl')
   h1 {{appName}}
 
   .app-actions
-    select.form-control.scale(ng-model='app.scale', ng-change='scale(appName, app)')
+    select.form-control.scale(ng-model='app.scale', ng-show='app.master', ng-change='scale(appName, app)')
       option(value='') Scale
-    button.btn.btn-warning(ng-click='restart(appName)') Restart app
+    button.btn.btn-warning(ng-show='app.master', ng-click='restart(appName)') Restart
+    button.btn.btn-danger(ng-show='app.master', ng-click='stop(appName)') Stop
+    button.btn.btn-success(ng-hide='app.master', ng-click='start(appName)') Start app
 
   .app-config(ng-controller='ConfigCtrl')
     dl.col-xxs-12.col-xs-6.col-md-4.col-lg-3(ng-repeat='(key, val) in config')
@@ -21,7 +23,8 @@ div(ng-controller='StatusCtrl')
 
     tr
       td Master
-      td(class='state-{{status[appName].master.state}}') {{status[appName].master.state}}
+      td(class='state-{{status[appName].master.state || "stopped"}}')
+        span {{status[appName].master.state || "stopped"}}
         span.badge.badge-danger(ng-hide='app.errors===0') {{app.errors}}
       td.r.uptime.hidden-xs {{uptime(status[appName].master.startTime)}}
       td.r {{status[appName].master.usage.cpu | cpu}}

@@ -57,10 +57,6 @@ h2 {
 .status th.cpu {
   width: 20%;
 }
-.status td.state-running,
-.status td.state-listening {
-  color: #008000;
-}
 .status .badge-danger {
   position: absolute;
   margin: 1px 4px;
@@ -74,6 +70,22 @@ h2 {
 .status .scale {
   margin: 0 5px -2px 0;
   padding: 1px 0 2px;
+}
+.status td.state-running,
+.status td.state-listening {
+  color: #008000;
+}
+.status td.state-starting,
+.status td.state-online {
+  color: #808000;
+}
+.status td.state-stopped,
+.status td.state-none {
+  color: #888;
+}
+.status td.state-fatal {
+  font-weight: bold;
+  color: #f00;
 }
 #config {
   font-family: monospace;

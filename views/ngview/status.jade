@@ -11,16 +11,18 @@ table#status.table.table-condensed.status(ng-controller='StatusCtrl')
     tr(ng-repeat-start='(appName, app) in status')
       td(rowspan='{{app.workers.length+1}}')
         a(href='#/app/{{appName}}') {{appName}}
-      td Master
-      td(class='state-{{app.master.state}}') {{app.master.state}}
+      td {{app.master && "Master"}}
+      td(class='state-{{app.master.state || "stopped"}}')
+        span {{app.master.state  || "stopped"}}
         span.badge.badge-danger(ng-hide='app.errors===0') {{app.errors}}
       td.r.uptime.hidden-xxs {{uptime(app.master.startTime)}}
       td.r.hidden-xs {{app.master.usage.cpu | cpu}}
       td.r.hidden-xs {{app.master.usage.ram | ram}}
-      td.r.hidden-xs
+      td.hidden-xs
         select.scale(ng-model='app.scale', ng-change='scale(appName, app)')
           option(value='') Scale
-        button.btn.btn-warning(ng-click='restart(appName)') Restart
+        button.btn.btn-warning(ng-show='app.master' ng-click='restart(appName)') Restart
+        button.btn.btn-success(ng-hide='app.master' ng-click='start(appName)') Start
     tr(ng-repeat-end, ng-repeat='worker in app.workers')
       td
         span.hidden-xxs Worker 

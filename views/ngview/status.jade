@@ -16,8 +16,8 @@ table#status.table.table-condensed.status(ng-controller='StatusCtrl')
         span {{app.master.state  || "stopped"}}
         span.badge.badge-danger(ng-hide='app.errors===0') {{app.errors}}
       td.r.uptime.hidden-xxs {{uptime(app.master.startTime)}}
-      td.r.hidden-xs {{app.master.usage.cpu | cpu}}
-      td.r.hidden-xs {{app.master.usage.ram | ram}}
+      td.r.hidden-xs {{app.master.usage.cpu}}%
+      td.r.hidden-xs {{app.master.usage.ram}} MB
       td.hidden-xs
         select.scale(ng-model='app.scale', ng-change='scale(appName, app)')
           option(value='') Scale
@@ -29,5 +29,5 @@ table#status.table.table-condensed.status(ng-controller='StatusCtrl')
         span &#35;{{worker.workerId}}
       td(class='state-{{worker.state}}') {{worker.state}}
       td.r.uptime.hidden-xxs {{uptime(worker.startTime)}}
-      td.r.hidden-xs {{worker.usage.cpu | cpu}}
-      td.r.hidden-xs {{worker.usage.ram | ram}}
+      td.r.hidden-xs {{worker.usage.cpu}}%
+      td.r.hidden-xs {{worker.usage.ram}} MB

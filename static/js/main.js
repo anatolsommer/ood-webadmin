@@ -131,18 +131,6 @@
     });
   });
 
-  ood.filter('cpu', function() {
-    return function(p) {
-      return (typeof p!=='number' || p===-1) ? 'N/A' : p.toFixed(1)+'%';
-    };
-  });
-
-  ood.filter('ram', function() {
-    return function(b) {
-      return (typeof b!=='number' || b===-1) ? 'N/A' : (b/1048576).toFixed(2)+' MB';
-    };
-  });
-
   ood.filter('teselecta', function($sce) {
     return function(d) {
       return $sce.trustAsHtml(teselecta(d));

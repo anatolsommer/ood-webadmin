@@ -8,9 +8,17 @@
     "type": "git",
     "url": "https://github.com/anatolsommer/ood-webadmin.git"
   },
-  "keywords": ["ood", "webadmin", "web", "webinterface", "oodmin"],
+  "keywords": [
+    "ood",
+    "webadmin",
+    "web",
+    "webinterface",
+    "oodmin"
+  ],
   "dependencies": {
     "body-parser": "^1.15.0",
+    "compression": "^1.6.1",
+    "connect-redis": "^2.5.1",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "jade": "^1.11.0",

@@ -27,8 +27,10 @@ div(ng-controller='StatusCtrl')
         span {{status[appName].master.state || "stopped"}}
         span.badge.badge-danger(ng-hide='app.errors===0') {{app.errors}}
       td.r.uptime.hidden-xs {{uptime(status[appName].master.startTime)}}
-      td.r {{status[appName].master.usage.cpu}}%
-      td.r {{status[appName].master.usage.ram}} MB
+      td.r {{status[appName].master.usage.cpu && status[appName].master.usage.cpu+"%"}}
+      td.r {{status[appName].master.usage.ram && status[appName].master.usage.ram+" MB"}}
+      td.r {{worker.usage.cpu && worker.usage.cpu+"%"}}
+      td.r {{worker.usage.ram && worker.usage.ram+" MB"}}
     tr(ng-repeat='worker in status[appName].workers')
       td
         span.hidden-xxs Worker 
